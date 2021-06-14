@@ -24,9 +24,11 @@ const useStyles = makeStyles({
     width: "100%",
     flexDirection: "column",
     justifyContent: "space-between",
-    color: "rgba(0, 0, 0, 0.87)",
-    backgroundColor: "#fafafa",
-    boxShadow: "0 0 8px rgba(0,0,0,0.25)",
+    color: "#1c1e21",
+    backgroundColor: "#fff",
+    boxShadow:
+      "rgba(60, 64, 67, 0.3) 1px 2px 3px 1px, rgba(60, 64, 67, 0.15) 1px 2px 4px 2px",
+    borderRadius: "5px",
   },
   paper: {
     display: "flex",
@@ -124,7 +126,7 @@ const Todo: React.FC<{
       <MyModal open={openModal} setOpen={setOpenModal}>
         {body}
       </MyModal>
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6}>
         <Box className={classes.root}>
           <Box textAlign="center">
             <Typography noWrap variant="h6">

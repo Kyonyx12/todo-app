@@ -14,9 +14,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   if (localStorage.getItem("loged") === "true") {
     dispatch(authActions.login(localStorage.getItem("userId")));
   }
-  if (localStorage.getItem("darkmode") === "on") {
-    dispatch(authActions.darkmode(true));
-  }
+
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
   return (

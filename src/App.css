@@ -9,6 +9,24 @@
 
 body {
   height: 100vh;
-  color: #000000;
-  background: #fff;
+  color: #1c1e21;
+  background: linear-gradient(
+    45deg,
+    #1976d2 20%,
+    #2196f3 20% 50%,
+    #64b5f6 50% 80%,
+    #4791db 80%
+  );
+  padding: 1rem 0 0.5rem 0;
+}
+
+a {
+  color: #1c1e21;
+  padding-top: 0.5rem;
+}
+
+.divider {
+  height: 2px;
+  background-color: rgb(25, 118, 210);
+  min-width: 19vw;
 }

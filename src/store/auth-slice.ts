@@ -13,9 +13,6 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.userId = null;
     },
-    darkmode(state, action: PayloadAction<boolean>) {
-      state.darkmodeOn = true;
-    },
   },
 });
 

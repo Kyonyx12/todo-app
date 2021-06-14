@@ -5,13 +5,7 @@ import { notificationActions } from "../../store/notification-slice";
 import { authActions } from "../../store/auth-slice";
 import { InputRegister } from "../../models/models";
 import fb from "../../firebase/firebase";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Container,
-} from "@material-ui/core";
+import { FormControl, InputLabel, Input, Button, Box } from "@material-ui/core";
 import { initialInputRegistration } from "../../initialState/initialState";
 
 const Registration: React.FC = () => {
@@ -71,7 +65,14 @@ const Registration: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      style={{ backgroundColor: "#fff" }}
+      p={2}
+      borderRadius={5}
+    >
       <FormControl fullWidth>
         <InputLabel htmlFor="email">Email</InputLabel>
         <Input
@@ -117,7 +118,7 @@ const Registration: React.FC = () => {
       >
         <p>I already have and account...</p>
       </Link>
-    </Container>
+    </Box>
   );
 };
 export default Registration;

@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  ThemeProvider,
-  CssBaseline,
-  createMuiTheme,
-} from "@material-ui/core";
+import { Box, Button, Grid, Typography, AppBar } from "@material-ui/core";
 import { IoMdAddCircle } from "react-icons/io";
+import { FcTodoList } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/index";
 import { useHistory } from "react-router-dom";
@@ -20,7 +13,6 @@ import { authActions } from "../../store/auth-slice";
 import { notificationActions } from "../../store/notification-slice";
 import NewTodo from "../../components/NewTodo";
 import fb from "../../firebase/firebase";
-import { BsSun, BsMoon } from "react-icons/bs";
 import MyModal from "../../components/MyModal";
 import {
   initialStateTodos,
@@ -45,31 +37,13 @@ const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>(initialStateTodos);
   const [todoToEdit, setTodoToEdit] = useState(initialStateTodoToEdit);
   const [open, setOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const userId = useSelector((state: RootState) => state.auth.userId);
-  const darkmodeOn = useSelector((state: RootState) => state.auth.darkmodeOn);
 
   const userName = localStorage.getItem("username");
-
-  const theme = createMuiTheme({
-    palette: {
-      type: darkMode ? "dark" : "light",
-    },
-  });
-
-  const handleDarkMode = () => {
-    if (darkMode) {
-      setDarkMode(false);
-      localStorage.setItem("darkmode", "off");
-    } else {
-      setDarkMode(true);
-      localStorage.setItem("darkmode", "on");
-    }
-  };
 
   const getTodos = async (userId: string | null) => {
     await fb
@@ -90,14 +64,6 @@ const TodoApp: React.FC = () => {
   useEffect(() => {
     getTodos(userId);
   }, [userId]);
-
-  useEffect(() => {
-    if (darkmodeOn) {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-  }, [darkmodeOn]);
 
   const handleLogout = () => {
     localStorage.removeItem("loged");
@@ -138,62 +104,63 @@ const TodoApp: React.FC = () => {
       <MyModal open={open} setOpen={setOpen}>
         {body}
       </MyModal>
-      <ThemeProvider theme={theme}>
-        <CssBaseline>
+
+      <Box style={{ backgroundColor: "#fff" }} minHeight="96vh">
+        <AppBar position="static">
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            my={1}
+            py={1}
+            px={1}
+            style={{ backgroundColor: "#1976d2" }}
           >
-            <Typography noWrap variant="h6">
-              {userName}
-            </Typography>
-            <Box display="flex" alignContent="center">
-              <Box mx={2}>
-                {!darkMode ? (
-                  <Button>
-                    <BsMoon size="2rem" onClick={handleDarkMode} />
-                  </Button>
-                ) : (
-                  <Button>
-                    <BsSun size="2rem" onClick={handleDarkMode} />
-                  </Button>
-                )}
-              </Box>
+            <Typography variant="h6">{userName}</Typography>
+            <Box display="flex">
               <Button onClick={handleLogout} variant="contained">
                 Logout
               </Button>
             </Box>
           </Box>
-          <h1>Todo App</h1>
-          <Box display="flex" justifyContent="flex-end" pt={10}>
-            <Button onClick={() => setOpen(true)}>
-              <IoMdAddCircle size="4rem" />
-            </Button>
-          </Box>
-          <Box mt={2}>
-            <Grid container direction="row" justify="center" spacing={1}>
-              {todos.length > 0 ? (
-                todos.map((todo) => {
-                  return (
-                    <Todo
-                      key={todo.id}
-                      title={todo.title}
-                      id={todo.id}
-                      content={todo.content}
-                      setTodoToEdit={setTodoToEdit}
-                      setOpen={setOpen}
-                    />
-                  );
-                })
-              ) : (
-                <p>No todos to show.</p>
-              )}
-            </Grid>
-          </Box>
-        </CssBaseline>
-      </ThemeProvider>
+        </AppBar>
+        <h1 style={{ textAlign: "center", marginTop: "1.5rem" }}>
+          <span>
+            <FcTodoList size="1.5rem" />
+          </span>
+          <span>TODO</span>
+          <span style={{ color: "rgb(25, 118, 210)" }}>APP</span>
+        </h1>
+        <Box display="flex" justifyContent="flex-end" pt={6}>
+          <Button onClick={() => setOpen(true)}>
+            <IoMdAddCircle size="4rem" color="rgb(25, 118, 210)" />
+          </Button>
+        </Box>
+        <Box mt={2} px={1}>
+          <Grid container direction="row" justify="center" spacing={1}>
+            {todos.length > 0 ? (
+              todos.map((todo) => {
+                return (
+                  <Todo
+                    key={todo.id}
+                    title={todo.title}
+                    id={todo.id}
+                    content={todo.content}
+                    setTodoToEdit={setTodoToEdit}
+                    setOpen={setOpen}
+                  />
+                );
+              })
+            ) : (
+              <>
+                <Typography variant="h5">
+                  No todos to show.
+                  <div className="divider" />
+                </Typography>
+              </>
+            )}
+          </Grid>
+        </Box>
+      </Box>
     </>
   );
 };

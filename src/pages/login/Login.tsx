@@ -4,13 +4,7 @@ import { useHistory, Link } from "react-router-dom";
 import { authActions } from "../../store/auth-slice";
 import { InputLogin } from "../../models/models";
 import fb from "../../firebase/firebase";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Container,
-} from "@material-ui/core";
+import { FormControl, InputLabel, Input, Button, Box } from "@material-ui/core";
 import { initialInput } from "../../initialState/initialState";
 import { notificationActions } from "../../store/notification-slice";
 
@@ -59,7 +53,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      style={{ backgroundColor: "#fff" }}
+      p={2}
+      borderRadius={5}
+    >
       <FormControl fullWidth>
         <InputLabel htmlFor="email">Email</InputLabel>
         <Input
@@ -96,7 +97,7 @@ const Login: React.FC = () => {
       >
         <p>I don't have and account...</p>
       </Link>
-    </Container>
+    </Box>
   );
 };
 export default Login;

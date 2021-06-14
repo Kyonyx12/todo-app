@@ -12,7 +12,7 @@ import "./App.css";
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
       <Provider store={store}>
         <Router>
           <Switch>
@@ -21,6 +21,7 @@ const App: React.FC = () => {
             <PrivateRoute path="/" component={TodoApp} />
           </Switch>
         </Router>
+
         <MySnackbar />
       </Provider>
     </Container>

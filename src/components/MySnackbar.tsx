@@ -14,16 +14,32 @@ const MySnackbar: React.FC = () => {
 
   switch (severity) {
     case "error":
-      alert = <Alert severity="error">{message}</Alert>;
+      alert = (
+        <Alert variant="filled" style={{ width: "540px" }} severity="error">
+          {message}
+        </Alert>
+      );
       break;
     case "success":
-      alert = <Alert severity="success">{message}</Alert>;
+      alert = (
+        <Alert variant="filled" style={{ width: "540px" }} severity="success">
+          {message}
+        </Alert>
+      );
       break;
     case "info":
-      alert = <Alert severity="info">{message}</Alert>;
+      alert = (
+        <Alert variant="filled" style={{ width: "540px" }} severity="info">
+          {message}
+        </Alert>
+      );
       break;
     case "warning":
-      alert = <Alert severity="warning">{message}</Alert>;
+      alert = (
+        <Alert variant="filled" style={{ width: "540px" }} severity="warning">
+          {message}
+        </Alert>
+      );
       break;
   }
   const dispatch = useDispatch();
