@@ -13,17 +13,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/index";
 import { useHistory } from "react-router-dom";
 import Todo from "../../components/Todo";
-import MySnackbar from "../../components/MySnackbar";
 
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Todo as TodoType, Error } from "../../models/models";
+import { Todo as TodoType } from "../../models/models";
 import { authActions } from "../../store/auth-slice";
+import { notificationActions } from "../../store/notification-slice";
 import NewTodo from "../../components/NewTodo";
 import fb from "../../firebase/firebase";
 import { BsSun, BsMoon } from "react-icons/bs";
 import MyModal from "../../components/MyModal";
 import {
-  initialError,
   initialStateTodos,
   initialStateTodoToEdit,
 } from "../../initialState/initialState";
@@ -45,10 +44,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>(initialStateTodos);
   const [todoToEdit, setTodoToEdit] = useState(initialStateTodoToEdit);
-  const [errorInfo, setErrorInfo] = useState<Error>(initialError);
   const [open, setOpen] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const userId = useSelector((state: RootState) => state.auth.userId);
   const darkmodeOn = useSelector((state: RootState) => state.auth.darkmodeOn);
@@ -99,13 +99,11 @@ const TodoApp: React.FC = () => {
     }
   }, [darkmodeOn]);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
-
   const handleLogout = () => {
     localStorage.removeItem("loged");
     localStorage.removeItem("username");
     localStorage.removeItem("userId");
+
     fb.auth()
       .signOut()
       .then(() => {
@@ -113,17 +111,15 @@ const TodoApp: React.FC = () => {
         dispatch(authActions.login(null));
       })
       .catch((error) => {
-        setErrorInfo({ error: true, errorMessage: error.message });
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        );
       });
   };
-
-  // const handleClose = (e: React.SyntheticEvent, reason?: string) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-
-  //   setOpenAlert(false);
-  // };
 
   const classes = useStyles();
 
@@ -169,14 +165,6 @@ const TodoApp: React.FC = () => {
                 Logout
               </Button>
             </Box>
-            {errorInfo.error && (
-              <MySnackbar
-                openAlert={openAlert}
-                setOpenAlert={setOpenAlert}
-                message={errorInfo.errorMessage}
-                severity="error"
-              />
-            )}
           </Box>
           <h1>Todo App</h1>
           <Box display="flex" justifyContent="flex-end" pt={10}>

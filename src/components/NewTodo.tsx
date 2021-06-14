@@ -7,12 +7,12 @@ import {
   Button,
   Box,
 } from "@material-ui/core";
-import Todo, { Error, InputTodo } from "../models/models";
+import Todo, { InputTodo } from "../models/models";
 import fb from "../firebase/firebase";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/index";
-import MySnackbar from "./MySnackbar";
-import { initialError, initialStateTodo } from "../initialState/initialState";
+import { notificationActions } from "../store/notification-slice";
+import { initialStateTodo } from "../initialState/initialState";
 
 const NewTodo: React.FC<{
   todoToEdit: Todo;
@@ -20,8 +20,9 @@ const NewTodo: React.FC<{
   setOpen: (setOpen: boolean) => void;
 }> = ({ todoToEdit, setTodoToEdit, setOpen }) => {
   const [todo, setTodo] = useState<InputTodo>(initialStateTodo);
-  const [errorInfo, setErrorInfo] = useState<Error>(initialError);
-  const [openAlert, setOpenAlert] = useState(false);
+
+  const dispatch = useDispatch();
+
   const userId = useSelector((state: RootState) => state.auth.userId);
 
   useEffect(() => {
@@ -60,8 +61,13 @@ const NewTodo: React.FC<{
         setTodo(initialStateTodo);
       })
       .catch((error) => {
-        setErrorInfo({ error: true, errorMessage: error.message });
-        setOpenAlert(true);
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        );
       });
   };
 
@@ -69,12 +75,37 @@ const NewTodo: React.FC<{
     e.preventDefault();
 
     if (todo.title === "" || todo.content === "") {
-      setErrorInfo({ error: true, errorMessage: "Inputs cannot be empty." });
-      setOpenAlert(true);
+      dispatch(
+        notificationActions.sendNotification({
+          severity: "error",
+          message: "Inputs cannot be empty.",
+          open: true,
+        })
+      );
       return;
     }
+
     saveTodo(todo.id, todo.title, todo.content);
-    setTodoToEdit({ id: null, title: "", content: "" });
+
+    if (todoToEdit.id) {
+      setTodoToEdit({ id: null, title: "", content: "" });
+      dispatch(
+        notificationActions.sendNotification({
+          severity: "info",
+          message: "Todo updated.",
+          open: true,
+        })
+      );
+    } else {
+      dispatch(
+        notificationActions.sendNotification({
+          severity: "success",
+          message: "New todo added.",
+          open: true,
+        })
+      );
+    }
+
     setOpen(false);
   };
   const handleCancel = () => {
@@ -119,14 +150,6 @@ const NewTodo: React.FC<{
           </Button>
         </Box>
       </Box>
-      {errorInfo.error && (
-        <MySnackbar
-          openAlert={openAlert}
-          setOpenAlert={setOpenAlert}
-          message={errorInfo.errorMessage}
-          severity="error"
-        />
-      )}
     </Container>
   );
 };

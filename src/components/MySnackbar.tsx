@@ -1,36 +1,38 @@
 import React from "react";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { notificationActions } from "../store/notification-slice";
 
-const MySnackbar: React.FC<{
-  openAlert: boolean;
-  setOpenAlert: (bool: boolean) => void;
-  message: string;
-  severity: string;
-}> = (props) => {
+const MySnackbar: React.FC = () => {
   let alert;
 
-  switch (props.severity) {
+  const { severity, message, open } = useSelector(
+    (state: RootState) => state.notification
+  );
+
+  switch (severity) {
     case "error":
-      alert = <Alert severity="error">{props.message}</Alert>;
+      alert = <Alert severity="error">{message}</Alert>;
       break;
     case "success":
-      alert = <Alert severity="success">{props.message}</Alert>;
+      alert = <Alert severity="success">{message}</Alert>;
       break;
     case "info":
-      alert = <Alert severity="info">{props.message}</Alert>;
+      alert = <Alert severity="info">{message}</Alert>;
       break;
     case "warning":
-      alert = <Alert severity="warning">{props.message}</Alert>;
+      alert = <Alert severity="warning">{message}</Alert>;
       break;
   }
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(notificationActions.showNotification(false));
+  };
 
   return (
-    <Snackbar
-      open={props.openAlert}
-      autoHideDuration={3000}
-      onClose={() => props.setOpenAlert(false)}
-    >
+    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
       {alert}
     </Snackbar>
   );

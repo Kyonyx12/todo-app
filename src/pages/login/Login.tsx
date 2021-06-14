@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { authActions } from "../../store/auth-slice";
-import { Error, InputLogin } from "../../models/models";
+import { InputLogin } from "../../models/models";
 import fb from "../../firebase/firebase";
 import {
   FormControl,
@@ -11,13 +11,11 @@ import {
   Button,
   Container,
 } from "@material-ui/core";
-import MySnackbar from "../../components/MySnackbar";
-import { initialInput, initialError } from "../../initialState/initialState";
+import { initialInput } from "../../initialState/initialState";
+import { notificationActions } from "../../store/notification-slice";
 
 const Login: React.FC = () => {
   const [input, setInput] = useState<InputLogin>(initialInput);
-  const [errorInfo, setErrorInfo] = useState<Error>(initialError);
-  const [openAlert, setOpenAlert] = useState(true);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -30,8 +28,7 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorInfo({ error: false, errorMessage: "" });
-    setOpenAlert(true);
+
     fb.auth()
       .signInWithEmailAndPassword(input.email, input.password)
       .then((response) => {
@@ -50,7 +47,13 @@ const Login: React.FC = () => {
         }
       })
       .catch((error) => {
-        setErrorInfo({ error: true, errorMessage: error.message });
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        );
       });
     setInput(initialInput);
   };
@@ -75,7 +78,6 @@ const Login: React.FC = () => {
           value={input.password}
         />
       </FormControl>
-
       <Button
         variant="contained"
         color="primary"
@@ -84,14 +86,6 @@ const Login: React.FC = () => {
       >
         Login
       </Button>
-      {errorInfo.error && (
-        <MySnackbar
-          openAlert={openAlert}
-          setOpenAlert={setOpenAlert}
-          message={errorInfo.errorMessage}
-          severity="error"
-        />
-      )}
       <Link
         to="/registration"
         style={{

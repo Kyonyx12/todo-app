@@ -32,6 +32,7 @@ export const initialStateTodo = { id: null, title: "", content: "" };
 export const initialStateNotification = {
   severity: "",
   message: "",
+  open: false,
 };
 
 //maybe and error? todoapp.tsx

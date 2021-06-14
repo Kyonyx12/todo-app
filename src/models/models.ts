@@ -42,6 +42,7 @@ export type Todo = {
 export type Notification = {
   severity: string;
   message: string;
+  open: boolean;
 };
 
 export default Todo;

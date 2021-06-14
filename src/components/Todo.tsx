@@ -10,10 +10,10 @@ import {
 import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import { makeStyles } from "@material-ui/styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/index";
-import { Todo as TodoType, Error } from "../models/models";
-import { initialError } from "../initialState/initialState";
+import { Todo as TodoType } from "../models/models";
+import { notificationActions } from "../store/notification-slice";
 import MyModal from "./MyModal";
 import fb from "../firebase/firebase";
 
@@ -49,10 +49,9 @@ const Todo: React.FC<{
   setTodoToEdit: (todoToEdit: TodoType) => void;
   setOpen: (setOpen: boolean) => void;
 }> = ({ title, id, content, setTodoToEdit, setOpen }) => {
-  const [errorInfo, setErrorInfo] = useState<Error>(initialError);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const userId = useSelector((state: RootState) => state.auth.userId);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleDelete = (id: number | null) => {
@@ -61,10 +60,23 @@ const Todo: React.FC<{
       .doc("users")
       .collection(`${userId}`)
       .doc(`${id}`)
-      .delete();
-    // .catch((error) =>
-    //  setErrorInfo({ error: true, errorMessage: error.message })
-    // )
+      .delete()
+      .catch((error) =>
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        )
+      );
+    dispatch(
+      notificationActions.sendNotification({
+        severity: "warning",
+        message: "Todo deleted.",
+        open: true,
+      })
+    );
   };
 
   const handleEdit = (id: number | null) => {
@@ -77,11 +89,16 @@ const Todo: React.FC<{
       .doc("users")
       .collection(`${userId}`)
       .doc(`${id}`)
-      .update(todoData);
-
-    // .catch((error) =>
-    //  setErrorInfo({ error: true, errorMessage: error.message })
-    // )
+      .update(todoData)
+      .catch((error) =>
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        )
+      );
   };
 
   const body = (
@@ -109,13 +126,6 @@ const Todo: React.FC<{
       </MyModal>
       <Grid item xs={12} sm={6} md={4}>
         <Box className={classes.root}>
-          {/*{errorInfo.error ? (
-        <Alert severity="error">{errorInfo.errorMessage}</Alert>
-      ) : (
-        <Alert severity={todoToEdit.id ? "info" : "success"}>
-          {todoToEdit.id ? "Todo updated." : "New todo added."}
-        </Alert>
-      )}*/}
           <Box textAlign="center">
             <Typography noWrap variant="h6">
               {title}

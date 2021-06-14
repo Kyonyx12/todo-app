@@ -6,8 +6,9 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./pages/main/PrivateRoute";
 import Login from "./pages/login/Login";
 import Registration from "./pages/registration/Registration";
-import "./App.css";
 import { Container } from "@material-ui/core";
+import MySnackbar from "./components/MySnackbar";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
             <PrivateRoute path="/" component={TodoApp} />
           </Switch>
         </Router>
+        <MySnackbar />
       </Provider>
     </Container>
   );

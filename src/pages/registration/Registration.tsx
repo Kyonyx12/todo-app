@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
+import { notificationActions } from "../../store/notification-slice";
 import { authActions } from "../../store/auth-slice";
-import { Error, InputRegister } from "../../models/models";
-import MySnackbar from "../../components/MySnackbar";
+import { InputRegister } from "../../models/models";
 import fb from "../../firebase/firebase";
 import {
   FormControl,
@@ -12,15 +12,10 @@ import {
   Button,
   Container,
 } from "@material-ui/core";
-import {
-  initialInputRegistration,
-  initialError,
-} from "../../initialState/initialState";
+import { initialInputRegistration } from "../../initialState/initialState";
 
 const Registration: React.FC = () => {
   const [input, setInput] = useState<InputRegister>(initialInputRegistration);
-  const [errorInfo, setErrorInfo] = useState<Error>(initialError);
-  const [openAlert, setOpenAlert] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -33,12 +28,15 @@ const Registration: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorInfo({ error: false, errorMessage: "" });
-    setOpenAlert(true);
 
     if (!(input.password === input.confirmPassword)) {
-      setErrorInfo({ error: true, errorMessage: "Passwords don't match." });
-      setOpenAlert(true);
+      dispatch(
+        notificationActions.sendNotification({
+          severity: "error",
+          message: "Passwords don't match.",
+          open: true,
+        })
+      );
       return;
     }
 
@@ -61,8 +59,13 @@ const Registration: React.FC = () => {
         }
       })
       .catch((error) => {
-        setErrorInfo({ error: true, errorMessage: error.message });
-        setOpenAlert(true);
+        dispatch(
+          notificationActions.sendNotification({
+            severity: "error",
+            message: error.message,
+            open: true,
+          })
+        );
       });
     setInput(initialInputRegistration);
   };
@@ -104,14 +107,6 @@ const Registration: React.FC = () => {
       >
         Signup
       </Button>
-      {errorInfo.error && (
-        <MySnackbar
-          openAlert={openAlert}
-          setOpenAlert={setOpenAlert}
-          message={errorInfo.errorMessage}
-          severity="error"
-        />
-      )}
       <Link
         to="/login"
         style={{
