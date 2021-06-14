@@ -21,7 +21,6 @@ const App: React.FC = () => {
             <PrivateRoute path="/" component={TodoApp} />
           </Switch>
         </Router>
-
         <MySnackbar />
       </Provider>
     </Container>

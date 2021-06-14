@@ -30,18 +30,6 @@ const useStyles = makeStyles({
       "rgba(60, 64, 67, 0.3) 1px 2px 3px 1px, rgba(60, 64, 67, 0.15) 1px 2px 4px 2px",
     borderRadius: "5px",
   },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    width: "70vw",
-    height: "120px",
-    color: "rgba(0, 0, 0, 0.87)",
-    transform: "translate(20%,283%)",
-    backgroundColor: "#fafafa",
-    border: "2px solid #000",
-  },
 });
 
 const Todo: React.FC<{
@@ -104,21 +92,25 @@ const Todo: React.FC<{
   };
 
   const body = (
-    <div className={classes.paper}>
+    <Box display="flex" flexDirection="column" textAlign="center" mt={8}>
       <h2>Do you want to delete this Todo?</h2>
-      <Box>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleDelete(id)}
-        >
-          Delete
-        </Button>
-        <Button variant="contained" onClick={() => setOpenModal(false)}>
-          Cancel
-        </Button>
+      <Box display="flex" justifyContent="center">
+        <Box mx={1}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleDelete(id)}
+          >
+            Delete
+          </Button>
+        </Box>
+        <Box mx={1}>
+          <Button variant="contained" onClick={() => setOpenModal(false)}>
+            Cancel
+          </Button>
+        </Box>
       </Box>
-    </div>
+    </Box>
   );
 
   return (
@@ -129,13 +121,15 @@ const Todo: React.FC<{
       <Grid item xs={12} sm={6}>
         <Box className={classes.root}>
           <Box textAlign="center">
-            <Typography noWrap variant="h6">
-              {title}
+            <Typography variant="h6">
+              {title.length >= 20 ? title.substring(0, 20) + "..." : title}
             </Typography>
           </Box>
           <CardContent>
-            <Typography noWrap paragraph>
-              {content}
+            <Typography paragraph>
+              {content.length >= 20
+                ? content.substring(0, 20) + "..."
+                : content}
             </Typography>
           </CardContent>
           <Box display="flex" justifyContent="flex-end">

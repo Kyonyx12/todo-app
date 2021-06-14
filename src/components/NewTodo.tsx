@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  FormControl,
-  Input,
-  InputLabel,
-  Container,
-  Button,
-  Box,
-} from "@material-ui/core";
+import { FormControl, Container, Button, Box } from "@material-ui/core";
 import Todo, { InputTodo } from "../models/models";
 import fb from "../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/index";
 import { notificationActions } from "../store/notification-slice";
 import { initialStateTodo } from "../initialState/initialState";
+import { TextField } from "@material-ui/core";
 
 const NewTodo: React.FC<{
   todoToEdit: Todo;
@@ -73,7 +67,6 @@ const NewTodo: React.FC<{
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (todo.title === "" || todo.content === "") {
       dispatch(
         notificationActions.sendNotification({
@@ -84,9 +77,7 @@ const NewTodo: React.FC<{
       );
       return;
     }
-
     saveTodo(todo.id, todo.title, todo.content);
-
     if (todoToEdit.id) {
       setTodoToEdit({ id: null, title: "", content: "" });
       dispatch(
@@ -105,9 +96,9 @@ const NewTodo: React.FC<{
         })
       );
     }
-
     setOpen(false);
   };
+
   const handleCancel = () => {
     setTodoToEdit({ id: null, title: "", content: "" });
     setOpen(false);
@@ -115,19 +106,28 @@ const NewTodo: React.FC<{
 
   return (
     <Container component="main" maxWidth="md">
-      <FormControl fullWidth>
-        <InputLabel>Title</InputLabel>
-        <Input onChange={handleChange("title")} value={todo.title} />
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel>Content</InputLabel>
-        <Input
-          onChange={handleChange("content")}
-          value={todo.content}
-          multiline={true}
-          rows="4"
-        />
-      </FormControl>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            onChange={handleChange("title")}
+            value={todo.title}
+            variant="outlined"
+            label="Title"
+          />
+        </FormControl>
+      </Box>{" "}
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            onChange={handleChange("content")}
+            value={todo.content}
+            multiline={true}
+            rows="2"
+            variant="outlined"
+            label="Content"
+          />
+        </FormControl>
+      </Box>
       <Box display="flex" flexWrap="wrap" justifyContent="space-evenly">
         <Box width="40%" my={1}>
           <Button

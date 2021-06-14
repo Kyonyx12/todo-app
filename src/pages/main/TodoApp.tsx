@@ -7,7 +7,6 @@ import { RootState } from "../../store/index";
 import { useHistory } from "react-router-dom";
 import Todo from "../../components/Todo";
 
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Todo as TodoType } from "../../models/models";
 import { authActions } from "../../store/auth-slice";
 import { notificationActions } from "../../store/notification-slice";
@@ -18,20 +17,6 @@ import {
   initialStateTodos,
   initialStateTodoToEdit,
 } from "../../initialState/initialState";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      width: "70vw",
-      height: "280px",
-      transform: "translate(21.5%,80%)",
-      backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 2, 2),
-    },
-  })
-);
 
 const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>(initialStateTodos);
@@ -87,16 +72,12 @@ const TodoApp: React.FC = () => {
       });
   };
 
-  const classes = useStyles();
-
   const body = (
-    <div className={classes.paper}>
-      <NewTodo
-        todoToEdit={todoToEdit}
-        setTodoToEdit={setTodoToEdit}
-        setOpen={setOpen}
-      />
-    </div>
+    <NewTodo
+      todoToEdit={todoToEdit}
+      setTodoToEdit={setTodoToEdit}
+      setOpen={setOpen}
+    />
   );
 
   return (
@@ -104,8 +85,14 @@ const TodoApp: React.FC = () => {
       <MyModal open={open} setOpen={setOpen}>
         {body}
       </MyModal>
-
-      <Box style={{ backgroundColor: "#fff" }} minHeight="96vh">
+      <Box
+        style={{
+          backgroundColor: "#fff",
+          boxShadow:
+            "rgba(60, 64, 67, 0.3) 1px 2px 3px 1px, rgba(60, 64, 67, 0.15) 1px 2px 4px 2px",
+        }}
+        minHeight="96vh"
+      >
         <AppBar position="static">
           <Box
             display="flex"

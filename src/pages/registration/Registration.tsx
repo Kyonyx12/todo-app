@@ -5,8 +5,15 @@ import { notificationActions } from "../../store/notification-slice";
 import { authActions } from "../../store/auth-slice";
 import { InputRegister } from "../../models/models";
 import fb from "../../firebase/firebase";
-import { FormControl, InputLabel, Input, Button, Box } from "@material-ui/core";
+import {
+  FormControl,
+  TextField,
+  Button,
+  Box,
+  Typography,
+} from "@material-ui/core";
 import { initialInputRegistration } from "../../initialState/initialState";
+import { RiLock2Line } from "react-icons/ri";
 
 const Registration: React.FC = () => {
   const [input, setInput] = useState<InputRegister>(initialInputRegistration);
@@ -73,50 +80,68 @@ const Registration: React.FC = () => {
       p={2}
       borderRadius={5}
     >
-      <FormControl fullWidth>
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <Input
-          id="email"
-          type="email"
-          onChange={handleChange("email")}
-          value={input.email}
-        />
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <Input
-          id="password"
-          type="password"
-          onChange={handleChange("password")}
-          value={input.password}
-        />
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
-        <Input
-          id="confirmPassword"
-          type="password"
-          onChange={handleChange("confirmPassword")}
-          value={input.confirmPassword}
-        />
-      </FormControl>
-      <Button
-        variant="contained"
+      <Box
+        style={{ backgroundColor: "rgb(25, 118, 210)" }}
+        borderRadius="30px"
+        height="60px"
+        width="60px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        p={1}
         color="primary"
-        fullWidth
-        onClick={handleLogin}
       >
-        Signup
-      </Button>
-      <Link
-        to="/login"
-        style={{
-          textAlign: "center",
-          textDecoration: "none",
-          fontSize: "20px",
-        }}
-      >
-        <p>I already have and account...</p>
+        <RiLock2Line size="2.5rem" color="#fff" />
+      </Box>
+      <Typography variant="h5">Sing Up</Typography>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            id="email"
+            type="email"
+            onChange={handleChange("email")}
+            value={input.email}
+            label="Email"
+            variant="outlined"
+          />
+        </FormControl>
+      </Box>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            id="password"
+            type="password"
+            onChange={handleChange("password")}
+            value={input.password}
+            label="Password"
+            variant="outlined"
+          />
+        </FormControl>
+      </Box>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            id="confirmPassword"
+            type="password"
+            onChange={handleChange("confirmPassword")}
+            value={input.confirmPassword}
+            label="Confirm Password"
+            variant="outlined"
+          />
+        </FormControl>
+      </Box>
+      <Box width="100%" my={1}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleLogin}
+          fullWidth
+        >
+          Signup
+        </Button>
+      </Box>
+      <Link to="/login">
+        <Typography variant="h6">I already have and account.</Typography>
       </Link>
     </Box>
   );

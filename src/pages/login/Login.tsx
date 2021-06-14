@@ -4,7 +4,14 @@ import { useHistory, Link } from "react-router-dom";
 import { authActions } from "../../store/auth-slice";
 import { InputLogin } from "../../models/models";
 import fb from "../../firebase/firebase";
-import { FormControl, InputLabel, Input, Button, Box } from "@material-ui/core";
+import {
+  FormControl,
+  Button,
+  Box,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { RiLock2Line } from "react-icons/ri";
 import { initialInput } from "../../initialState/initialState";
 import { notificationActions } from "../../store/notification-slice";
 
@@ -61,41 +68,56 @@ const Login: React.FC = () => {
       p={2}
       borderRadius={5}
     >
-      <FormControl fullWidth>
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <Input
-          id="email"
-          type="email"
-          onChange={handleChange("email")}
-          value={input.email}
-        />
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <Input
-          id="password"
-          type="password"
-          onChange={handleChange("password")}
-          value={input.password}
-        />
-      </FormControl>
-      <Button
-        variant="contained"
+      <Box
+        style={{ backgroundColor: "rgb(25, 118, 210)" }}
+        borderRadius="30px"
+        height="60px"
+        width="60px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        p={1}
         color="primary"
-        fullWidth
-        onClick={handleLogin}
       >
-        Login
-      </Button>
-      <Link
-        to="/registration"
-        style={{
-          textAlign: "center",
-          textDecoration: "none",
-          fontSize: "20px",
-        }}
-      >
-        <p>I don't have and account...</p>
+        <RiLock2Line size="2.5rem" color="#fff" />
+      </Box>
+      <Typography variant="h5">Sing In</Typography>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            id="email"
+            type="email"
+            onChange={handleChange("email")}
+            value={input.email}
+            label="Email"
+            variant="outlined"
+          />
+        </FormControl>
+      </Box>
+      <Box my={1} width="100%">
+        <FormControl fullWidth>
+          <TextField
+            id="password"
+            type="password"
+            onChange={handleChange("password")}
+            value={input.password}
+            label="Password"
+            variant="outlined"
+          />
+        </FormControl>
+      </Box>
+      <Box width="100%" my={1}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleLogin}
+        >
+          Login
+        </Button>
+      </Box>
+      <Link to="/registration">
+        <Typography variant="h6">I don't have and account.</Typography>
       </Link>
     </Box>
   );
